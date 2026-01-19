@@ -1,4 +1,4 @@
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { render } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { toastState } from 'ngx-sonner';
@@ -12,7 +12,7 @@ import { sleep } from './utils';
 async function setup(inputs: ToastTestInputs) {
   const user = userEvent.setup();
   const returned = await render(ToasterTestComponent, {
-    providers: [provideExperimentalZonelessChangeDetection()],
+    providers: [provideZonelessChangeDetection()],
     componentInputs: inputs,
   });
   const trigger = returned.getByTestId('trigger');
