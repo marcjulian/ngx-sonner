@@ -1,17 +1,19 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChild,
   ElementRef,
   inject,
   input,
   linkedSignal,
   numberAttribute,
-  OnDestroy,
+  type OnDestroy,
   PLATFORM_ID,
   signal,
+  TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -31,7 +33,13 @@ import { Position, Theme, ToasterProps } from './types';
 
 @Component({
   selector: 'ngx-sonner-toaster',
-  imports: [ToastComponent, ToastFilterPipe, IconComponent, LoaderComponent],
+  imports: [
+    ToastComponent,
+    ToastFilterPipe,
+    IconComponent,
+    LoaderComponent,
+    NgTemplateOutlet,
+  ],
   template: `
     @if (toasts().length > 0) {
       <section
@@ -77,21 +85,37 @@ import { Position, Theme, ToasterProps } from './types';
                 [classes]="toastOptions().classes ?? {}"
                 [duration]="toastOptions().duration ?? duration()"
                 [unstyled]="toastOptions().unstyled ?? false">
-                <ng-content select="[loading-icon]" loading-icon>
-                  <ngx-sonner-loader [isVisible]="toast.type === 'loading'" />
-                </ng-content>
-                <ng-content select="[success-icon]" success-icon>
-                  <ngx-sonner-icon type="success" />
-                </ng-content>
-                <ng-content select="[error-icon]" error-icon>
-                  <ngx-sonner-icon type="error" />
-                </ng-content>
-                <ng-content select="[warning-icon]" warning-icon>
-                  <ngx-sonner-icon type="warning" />
-                </ng-content>
-                <ng-content select="[info-icon]" info-icon>
-                  <ngx-sonner-icon type="info" />
-                </ng-content>
+                @if (loadingIcon(); as loadingIcon) {
+                  <ng-container *ngTemplateOutlet="loadingIcon" loading-icon />
+                } @else {
+                  <ngx-sonner-loader
+                    [isVisible]="toast.type === 'loading'"
+                    loading-icon />
+                }
+
+                @if (successIcon(); as successIcon) {
+                  <ng-container *ngTemplateOutlet="successIcon" success-icon />
+                } @else {
+                  <ngx-sonner-icon type="success" success-icon />
+                }
+
+                @if (errorIcon(); as errorIcon) {
+                  <ng-container *ngTemplateOutlet="errorIcon" error-icon />
+                } @else {
+                  <ngx-sonner-icon type="error" error-icon />
+                }
+
+                @if (warningIcon(); as warningIcon) {
+                  <ng-container *ngTemplateOutlet="warningIcon" warning-icon />
+                } @else {
+                  <ngx-sonner-icon type="warning" warning-icon />
+                }
+
+                @if (infoIcon(); as infoIcon) {
+                  <ng-container *ngTemplateOutlet="infoIcon" info-icon />
+                } @else {
+                  <ngx-sonner-icon type="info" info-icon />
+                }
               </ngx-sonner-toast>
             }
           </ol>
@@ -181,6 +205,12 @@ export class NgxSonnerToaster implements OnDestroy {
     '--gap': `${GAP}px`,
     ...this._style(),
   }));
+
+  loadingIcon = contentChild('loadingIcon', { read: TemplateRef });
+  successIcon = contentChild('successIcon', { read: TemplateRef });
+  errorIcon = contentChild('errorIcon', { read: TemplateRef });
+  warningIcon = contentChild('warningIcon', { read: TemplateRef });
+  infoIcon = contentChild('infoIcon', { read: TemplateRef });
 
   constructor() {
     this.reset();
