@@ -314,11 +314,21 @@ You can change the default icons by providing your icons inside the toaster comp
 
 ```html
 <ngx-sonner-toaster>
-  <custom-loading-icon loading-icon/>
-  <custom-success-icon success-icon />
-  <custom-error-icon error-icon />
-  <custom-info-icon info-icon />
-  <custom-warning-icon warning-icon />
+  <ng-template #loadingIcon>
+    <custom-loading-icon />
+  </ng-template>
+  <ng-template #successIcon>
+    <custom-success-icon />
+  </ng-template>
+  <ng-template #errorIcon>
+    <custom-error-icon />
+  </ng-template>
+  <ng-template #infoIcon>
+    <custom-info-icon />
+  </ng-template>
+  <ng-template #warningIcon>
+    <custom-warning-icon />
+  </ng-template>
 </ngx-sonner-toaster>
 ```
 
