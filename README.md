@@ -315,6 +315,7 @@ You can change the default icons by providing your icons inside the toaster comp
 ```html
 <ngx-sonner-toaster>
   <ng-template #loadingIcon>
+    <!-- add animation class to custom loading icon (e.g. animate-spin from Tailwind CSS) -->
     <custom-loading-icon />
   </ng-template>
   <ng-template #successIcon>
