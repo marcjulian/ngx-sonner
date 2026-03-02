@@ -67,7 +67,7 @@ import { Position, Theme, ToasterProps } from './types';
                 [visibleToasts]="visibleToasts()"
                 [closeButton]="closeButton()"
                 [interacting]="interacting()"
-                [position]="position()"
+                [position]="pos"
                 [expandByDefault]="expand()"
                 [expanded]="expanded()"
                 [actionButtonStyle]="toastOptions().actionButtonStyle"

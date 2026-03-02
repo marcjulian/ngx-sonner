@@ -184,8 +184,12 @@ import { ToastProps } from './types';
 export class ToastComponent implements AfterViewInit, OnDestroy {
   protected readonly cn = cn;
 
-  toasts = toastState.toasts;
-  heights = toastState.heights;
+  toasts = computed(() =>
+    toastState.toasts().filter(t => t.position === this.position())
+  );
+  heights = computed(() =>
+    toastState.heights().filter(h => h.position === this.position())
+  );
   removeHeight = toastState.removeHeight;
   addHeight = toastState.addHeight;
   dismiss = toastState.dismiss;
@@ -327,7 +331,11 @@ export class ToastComponent implements AfterViewInit, OnDestroy {
     this.mounted.set(true);
     const height = this.toastRef().nativeElement.getBoundingClientRect().height;
     this.initialHeight.set(height);
-    this.addHeight({ toastId: this.toast().id, height });
+    this.addHeight({
+      toastId: this.toast().id,
+      height,
+      position: this.position(),
+    });
   }
 
   ngOnDestroy() {
